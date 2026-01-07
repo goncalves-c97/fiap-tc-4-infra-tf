@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "A região AWS preferida para a criação dos recursos."
   type        = string
-  default     = "sa-east-1"
+  default     = "us-east-1"
 }
 
 variable "public_subnet_cidr" {

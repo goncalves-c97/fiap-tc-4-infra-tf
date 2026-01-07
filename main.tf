@@ -9,7 +9,7 @@ resource "aws_vpc" "this" {
   enable_dns_hostnames = true                    # Required for public/private DNS hostnames (e.g. when using load balancers, ECS, RDS)
   enable_dns_support   = true                    # Enables AmazonProvidedDNS in the VPC
   tags = {
-    Name = "base-vpc"                            # Naming tag for identification
+    Name = "tc4-vpc"                            # Naming tag for identification
   }
 }
 
