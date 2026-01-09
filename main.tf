@@ -6,10 +6,10 @@
 # ---------------------------------------------------------------------------
 resource "aws_vpc" "this" {
   cidr_block           = var.vpc_cidr
-  enable_dns_hostnames = true                    # Required for public/private DNS hostnames (e.g. when using load balancers, ECS, RDS)
-  enable_dns_support   = true                    # Enables AmazonProvidedDNS in the VPC
+  enable_dns_hostnames = true # Required for public/private DNS hostnames (e.g. when using load balancers, ECS, RDS)
+  enable_dns_support   = true # Enables AmazonProvidedDNS in the VPC
   tags = {
-    Name = "tc4-vpc"                            # Naming tag for identification
+    Name = "tc4-vpc" # Naming tag for identification
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "base-igw"          # Naming tag for clarity in console
+    Name = "base-igw" # Naming tag for clarity in console
   }
 }
 
@@ -119,8 +119,8 @@ resource "aws_subnet" "private_b" {
 # ---------------------------------------------------------------------------
 resource "aws_eip" "nat" {
   domain = "vpc"
-  tags = { 
-    Name = "eip-nat-1"         # Identifies the EIP as used by primary NAT
+  tags = {
+    Name = "eip-nat-1" # Identifies the EIP as used by primary NAT
   }
 }
 
@@ -146,8 +146,8 @@ resource "aws_nat_gateway" "gw" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public.id
   depends_on    = [aws_internet_gateway.igw]
-  tags = { 
-    Name = "nat-1"          # Identifier for primary (single-AZ) NAT
+  tags = {
+    Name = "nat-1" # Identifier for primary (single-AZ) NAT
   }
 }
 
@@ -318,7 +318,7 @@ resource "aws_route_table_association" "private_assoc_b" {
 #   - name kept explicit for clarity and stable cross-module references.
 # ---------------------------------------------------------------------------
 resource "aws_db_subnet_group" "rds_subnet_group" {
-  name       = "rds-sqlserver-subnet-group"
+  name = "rds-sqlserver-subnet-group"
   subnet_ids = [
     aws_subnet.private_a.id,
     aws_subnet.private_b.id

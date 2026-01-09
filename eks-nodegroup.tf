@@ -11,14 +11,14 @@ resource "aws_iam_role" "eks_nodegroup_role" {
   name = "eks-nodegroup-role"
 
   assume_role_policy = jsonencode({
-    Version   = "2012-10-17",
+    Version = "2012-10-17",
     Statement = [
       {
-        Effect    = "Allow",
+        Effect = "Allow",
         Principal = {
           Service = "ec2.amazonaws.com"
         },
-        Action    = "sts:AssumeRole"
+        Action = "sts:AssumeRole"
       }
     ]
   })
@@ -50,7 +50,7 @@ resource "aws_eks_node_group" "this" {
   cluster_name    = aws_eks_cluster.this.name
   node_group_name = "fiap-eks-nodegroup"
   node_role_arn   = aws_iam_role.eks_nodegroup_role.arn
-  subnet_ids      = [
+  subnet_ids = [
     aws_subnet.private_a.id,
     aws_subnet.private_b.id
   ]
