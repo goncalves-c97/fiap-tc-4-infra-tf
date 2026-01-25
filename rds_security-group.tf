@@ -1,7 +1,7 @@
 resource "aws_security_group" "rds_sg" {
   name        = "rds-sqlserver-security-group"
   description = "Permite acesso ao SQL Server"
-  vpc_id      = data.aws_vpc.existing_vpc.id # Referência dinâmica ao ID da VPC
+  vpc_id      = aws_vpc.tc4-vpc.id # Referência dinâmica ao ID da VPC
 
   ingress {
     from_port   = 1433

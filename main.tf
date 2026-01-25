@@ -4,7 +4,7 @@
 # - DNS support/hostnames enabled to allow internal name resolution (ECS, RDS, etc.)
 # - CIDR defined via var.vpc_cidr to keep network layout configurable
 # ---------------------------------------------------------------------------
-resource "aws_vpc" "this" {
+resource "aws_vpc" "tc4-vpc" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true # Required for public/private DNS hostnames (e.g. when using load balancers, ECS, RDS)
   enable_dns_support   = true # Enables AmazonProvidedDNS in the VPC
@@ -22,7 +22,7 @@ resource "aws_vpc" "this" {
 # - Referenced in the public route table (0.0.0.0/0 -> igw)
 # ---------------------------------------------------------------------------
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.this.id
+  vpc_id = aws_vpc.tc4-vpc.id
 
   tags = {
     Name = "base-igw" # Naming tag for clarity in console
@@ -43,7 +43,7 @@ resource "aws_internet_gateway" "igw" {
 #   - Tag aids console identification and cost allocation
 # ---------------------------------------------------------------------------
 resource "aws_subnet" "public" {
-  vpc_id                  = aws_vpc.this.id
+  vpc_id                  = aws_vpc.tc4-vpc.id
   cidr_block              = var.public_subnet_cidr
   availability_zone       = "${var.aws_region}a"
   map_public_ip_on_launch = true
@@ -66,7 +66,7 @@ resource "aws_subnet" "public" {
 #   - Add additional tags (env, cost center) if required
 # ---------------------------------------------------------------------------
 resource "aws_subnet" "private_a" {
-  vpc_id                  = aws_vpc.this.id
+  vpc_id                  = aws_vpc.tc4-vpc.id
   cidr_block              = var.private_subnet_a_cidr
   availability_zone       = "${var.aws_region}a"
   map_public_ip_on_launch = false
@@ -91,7 +91,7 @@ resource "aws_subnet" "private_a" {
 #   - Add environment / cost center tags as needed
 # ---------------------------------------------------------------------------
 resource "aws_subnet" "private_b" {
-  vpc_id                  = aws_vpc.this.id
+  vpc_id                  = aws_vpc.tc4-vpc.id
   cidr_block              = var.private_subnet_b_cidr
   availability_zone       = "${var.aws_region}b"
   map_public_ip_on_launch = false
@@ -166,7 +166,7 @@ resource "aws_nat_gateway" "gw" {
 #   - Can be shared across multiple public subnets; create per-AZ tables only if divergent routing is required.
 # ---------------------------------------------------------------------------
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.this.id
+  vpc_id = aws_vpc.tc4-vpc.id
   tags = {
     Name = "rtb-public" # Identifies this as the public route table
   }
@@ -236,7 +236,7 @@ resource "aws_route_table_association" "public_assoc" {
 #     tables and re-associate subnets.
 # ---------------------------------------------------------------------------
 resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.this.id
+  vpc_id = aws_vpc.tc4-vpc.id
   tags = {
     Name = "rtb-private" # Shared private route table (single NAT design)
   }
