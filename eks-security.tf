@@ -5,7 +5,7 @@
 resource "aws_security_group" "eks_cluster_sg" {
   name        = "eks-cluster-sg"
   description = "Security group for EKS cluster control plane"
-  vpc_id      = aws_vpc.this.id
+  vpc_id      = aws_vpc.tc4-vpc.id
 
   tags = {
     Name = "eks-cluster-sg"
