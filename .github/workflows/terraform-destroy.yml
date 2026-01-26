@@ -11,10 +11,6 @@ jobs:
   destroy-prod:
     if: github.ref == 'refs/heads/production' && github.event.inputs.confirm_destroy == 'DESTROY'
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: LoginMs/terraform
         
     steps:
       - name: Checkout
